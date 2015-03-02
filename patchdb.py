@@ -1,7 +1,9 @@
 from collections import defaultdict
+import util
 
 __author__ = 'Travis'
 from PIL import Image
+import numpy as np
 
 
 class PatchDB(object):
@@ -34,4 +36,21 @@ class PatchDB(object):
         collage.show()
         collage.save("collage.png")
 
+    def convnparray(self):
+        numfaces = len(self.faces)
+        npfaces = np.zeros(144)
+
+        for v in self.faces:
+            f = np.fromimage(v).ravel()
+            npfaces = np.append(np, f)
+
+        npfaces = npfaces.reshape(numfaces, 144)
+        return npfaces[1:]      # Index from 1 onward to not include initial zeros
+
+    def meanimage(self):
+        nfaces = self.convnparray()
+        meanface = nfaces.mean(axis=0)
+        util.gshow(meanface)
+        util.saveimage(meanface, "mean.png")
+        self.meanface = meanface
 

@@ -29,7 +29,7 @@ def getfacebounds(lex, ley, lmx, lmy, rex, rey, rmx, rmy):
         br.x += (yrg - xrg) / 2 + scale
         br.y += scale
 
-    return (tl.toint(), br.toint())
+    return tl.toint(), br.toint()
     # return np.s_[tl.y:br.y,
     # tl.x:br.x]
 
