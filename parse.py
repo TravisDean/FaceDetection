@@ -17,7 +17,7 @@ def getfacebounds(lex, ley, lmx, lmy, rex, rey, rmx, rmy):
     xrg = br.x - tl.x
     yrg = br.y - tl.y
     maxinside = max(xrg, yrg)
-    scale = maxinside / 4
+    scale = maxinside / 2
     if xrg > yrg:
         tl.x -= scale
         tl.y -= (xrg - yrg) / 2 + scale
@@ -30,27 +30,17 @@ def getfacebounds(lex, ley, lmx, lmy, rex, rey, rmx, rmy):
         br.y += scale
 
     return tl.toint(), br.toint()
-    # return np.s_[tl.y:br.y,
-    # tl.x:br.x]
 
 
 def makefacepatch(filename, lex, ley, rex, rey, lmx, lmy, rmx, rmy):
-    # img = loadimage(filename)
     pimg = Image.open(filename)
     tl, br = getfacebounds(lex, ley, lmx, lmy, rex, rey, rmx, rmy)
-    # draw = ImageDraw.Draw(pimg)
-    # draw.rectangle([tl.x,tl.y,br.x,br.y],fill=128)
 
     crp = pimg.copy()
     crp = crp.crop([tl.x, tl.y, br.x, br.y])
-    rsz = crp.resize((12, 12), Image.ANTIALIAS)
-    eqlz = ImageOps.autocontrast(rsz, 5)
-    # rsz.show()
+    ret = crp.resize((12, 12), Image.ANTIALIAS)
 
-    return eqlz
-    # pimg.crop()
-    # pimg.
-    # pimg.show()
+    return ret
 
 
 def makerandompatch(filename):

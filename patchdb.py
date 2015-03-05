@@ -9,13 +9,15 @@ import numpy as np
 class PatchDB(object):
     def __init__(self):
         self.mapping = defaultdict(list)
+        self.pilFaces = []
         self.faces = []
         self.notfaces = []
 
     def addPatch(self, filename, patch, face=True):
         self.mapping[filename].append(patch)
         if face:
-            self.faces.append(patch)
+            self.pilFaces.append(patch)
+            self.faces.append(np.array(patch).ravel())
         else:
             self.notfaces.append(patch)
 
@@ -26,31 +28,24 @@ class PatchDB(object):
         # patches = list(self.data.values())
         sidesize = 240
         collage = Image.new(mode="L", size=(sidesize, sidesize), color="blue")
-        for v in self.faces:
+        for v in self.pilFaces:
             s = v.resize((24, 24), Image.ANTIALIAS)
             collage.paste(s, (x, y))
             x += 24
             if x >= 240:
                 y += 24
                 x = 0
-        collage.show()
+        # collage.show()
         collage.save("collage.png")
 
-    def convnparray(self):
-        numfaces = len(self.faces)
-        npfaces = np.zeros(144)
-
-        for v in self.faces:
-            f = np.fromimage(v).ravel()
-            npfaces = np.append(np, f)
-
-        npfaces = npfaces.reshape(numfaces, 144)
-        return npfaces[1:]      # Index from 1 onward to not include initial zeros
-
     def meanimage(self):
-        nfaces = self.convnparray()
-        meanface = nfaces.mean(axis=0)
-        util.gshow(meanface)
-        util.saveimage(meanface, "mean.png")
-        self.meanface = meanface
+        faces = np.array(self.faces)
+        meanface = faces.mean(axis=0)
+        # meanface = np.median(faces, axis=0)
+        # util.gshow(meanface)
+        util.saveimage(meanface.reshape(12,12), "mean.png")
+        self.avgface = meanface.ravel()
 
+    def cov(self):
+        return np.corrcoef(self.avgface, self.faces[9])
+        # return np.corrcov(self.avgface,self.faces[0])

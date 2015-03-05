@@ -9,6 +9,7 @@ import skimage.color
 from pylab import cm as cm
 import skimage
 import skimage.io
+from scipy.misc import imsave
 
 
 def angle(a, b):
@@ -43,8 +44,7 @@ def loadimage(name):
 
 
 def saveimage(i, name):
-    skimage.io.imsave(name, i)
-    # ishow(i)
+    imsave(name, i)
     return
 
 
@@ -54,7 +54,7 @@ def ishow(i, colormap=None):
 
 
 def gshow(i):
-    pylab.imshow(i, cmap=cm.get_cmap('gray'), interpolation=None)
+    pylab.imshow(i, cmap=cm.get_cmap('gray'))#, interpolation=None)
     pylab.show()
 
 

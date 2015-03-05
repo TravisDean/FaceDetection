@@ -27,6 +27,8 @@ def run(facefile, nofaces=None):
 
     db.drawCollage()
 
+    db.meanimage()
+    print(db.cov())
     # img = loadimage(filename)
     # Do things to it here.
 
