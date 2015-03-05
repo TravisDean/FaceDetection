@@ -22,12 +22,13 @@ def run(facefile, nofaces=None):
 
     if nofaces is not None:
         for g in glob.glob(nofaces):
-            t = makerandompatch(g)
-            db.addPatch(g, t, face=False)
+            for _ in range(25):
+                t = makerandompatch(g)
+                db.addPatch(g, t, face=False)
 
     db.drawCollage()
 
-    db.meanimage()
+    db.getmeans()
     print(db.cov())
     # img = loadimage(filename)
     # Do things to it here.
@@ -40,4 +41,4 @@ if __name__ == "__main__":
         except Exception as e:
             print('Invalid input: ' + str(e))
     else:
-        run('testdata.txt')
+        run('testfaces.txt', './notfaces/*.*')

@@ -44,14 +44,16 @@ def makefacepatch(filename, lex, ley, rex, rey, lmx, lmy, rmx, rmy):
 
 
 def makerandompatch(filename):
-    pimg = Image.open(filename)
+    pimg = Image.open(filename).convert('L')
     mx, my = pimg.size
-    rndx = random.randint(12, mx - 12)
-    rndy = random.randint(12, my - 12)
+    rndx = random.randint(0, mx - 12)
+    rndy = random.randint(0, my - 12)
+    # print(str(rndx) + " - " + str(rndy))
 
-    # pimg = pimg.crop([])
-
-    pass
+    crp = pimg.copy()
+    crp = crp.crop([rndx, rndy, rndx+12, rndy+12])
+    ret = crp.resize((12, 12), Image.ANTIALIAS)
+    return ret
 
 
 fn = "voyager.gif"
