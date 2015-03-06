@@ -1,4 +1,5 @@
 from collections import defaultdict
+import math
 import util
 
 __author__ = 'Travis'
@@ -66,6 +67,19 @@ class PatchDB(object):
         self.avgnoise = meannoise.ravel()
 
 
-    def cov(self):
-        return np.corrcoef(self.avgface, self.faces[9])
+    # def cov(self, patch):
+    #     return np.corrcoef(self.avgface, patch)
         # return np.corrcov(self.avgface,self.faces[0])
+
+    def gauss_decision(self, patch):
+        facediff = patch - self.avgface
+        facediffmean = facediff.mean()
+        noisediff = patch - self.avgnoise
+        noisediffmean = noisediff.mean()
+
+        fstd = np.corrcoef(facediff)
+        gface = -math.exp(- facediffmean**2 / (2 * fstd**2 + 1e-05))
+        nstd = np.corrcoef(noisediff)
+        nface = -math.exp(- noisediffmean**2 / (2 * nstd**2 + 1e-05))
+
+        return gface <= nface
